@@ -35,3 +35,6 @@ plot_coeficiente_intervalo <- function(modelo1, modelo2, coef_name) {
   print(p)
 }
 
+
+
+
