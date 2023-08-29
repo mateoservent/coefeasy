@@ -1,60 +1,86 @@
-interpretar_coeficiente <- function(modelo) {
+interpretar_coeficiente <- function(modelo, x_nombre_completo, y_nombre_completo) {
 
-  # Obtenemos los coeficientes y sus estadísticas
-  summary_modelo <- summary(modelo)
+  # Cargar las librerías necesarias
+  if (!requireNamespace("car", quietly = TRUE)) {
+    install.packages("car")
+  }
+  library(car)
 
-  # Tomamos el primer coeficiente (excluyendo el intercepto)
-  coef_nombre <- names(coef(modelo))[2]
+  if (!requireNamespace("sandwich", quietly = TRUE)) {
+    install.packages("sandwich")
+  }
+  library(sandwich)
+
+  if (!requireNamespace("lmtest", quietly = TRUE)) {
+    install.packages("lmtest")
+  }
+  library(lmtest)
+
+
+  # Evaluar homocedasticidad
+  bptest_result <- bptest(modelo)
+  corregido <- FALSE
+
+  if (bptest_result$p.value < 0.05) {
+    # Hay evidencia de heterocedasticidad, corregir errores estándar
+    modelo_coef <- coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
+    corregido <- TRUE
+  } else {
+    # No hay evidencia de heterocedasticidad, usar errores estándar regulares
+    modelo_coef <- summary(modelo)
+  }
+
   coef_valor <- coef(modelo)[2]
-  coef_p_valor <- summary_modelo$coefficients[2, 4]
+  coef_p_valor <- modelo_coef$coefficients[2, 4]
 
-  # Obtener el nombre de la variable dependiente
-  dep_variable <- as.character(formula(modelo)[2])
-
-  # Interpretar el signo del coeficiente
   if (coef_valor > 0) {
     direccion <- "un aumento"
   } else {
     direccion <- "una disminución"
   }
 
-  # Interpretar la significatividad y el nivel de confianza
   nivel_confianza <- (1 - coef_p_valor) * 100
 
   if (coef_p_valor < 0.01) {
     significatividad <- paste("altamente significativo (p <", 0.01, ")")
-    hipotesis <- "se rechaza la hipótesis nula, indicando que hay evidencia suficiente para decir que la variable tiene un efecto sobre la respuesta"
+    hipotesis <- "se rechaza la hipótesis nula"
   } else if (coef_p_valor < 0.05) {
     significatividad <- paste("significativo (p <", 0.05, ")")
-    hipotesis <- "se rechaza la hipótesis nula, sugiriendo que es probable que la variable tenga un impacto en la respuesta"
+    hipotesis <- "se rechaza la hipótesis nula"
   } else {
     significatividad <- paste("no es significativo (p =", round(coef_p_valor, 3), ")")
-    hipotesis <- "no se rechaza la hipótesis nula, lo que significa que no hay evidencia suficiente para afirmar que la variable tiene un efecto sobre la respuesta"
+    hipotesis <- "no se rechaza la hipótesis nula"
   }
 
-  # Calcula la proporción de cambio
-  cambio <- paste("Por cada incremento unitario en", coef_nombre,
-                  "la", dep_variable, "cambia en", round(coef_valor, 2), "unidades.")
+  cambio <- paste("Por cada incremento unitario en", x_nombre_completo,
+                  ", la", y_nombre_completo, "cambia en", round(coef_valor, 2), "unidades.")
 
-  # Alerta en caso de que la significatividad no sea menor a 0.05
   if(coef_p_valor >= 0.05) {
-    alerta <- paste("¡Alerta! El coeficiente para", coef_nombre,
+    alerta <- paste("¡Alerta! El coeficiente para", x_nombre_completo,
                     "no es estadísticamente significativo con un valor p de", round(coef_p_valor, 3), ".")
     cambio <- paste(alerta, cambio)
   }
 
-  # Componer el mensaje en lenguaje natural
-  mensaje <- paste(cambio,
-                   "Con un nivel de confianza del", round(nivel_confianza, 2), "%,",
-                   "este efecto es", significatividad, "y", hipotesis, ".",
-                   "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+  mensaje_interpretacion <- paste(cambio,
+                                  "Con un nivel de confianza del", round(nivel_confianza, 2), "%,",
+                                  "este efecto es", significatividad, "y", hipotesis, ".",
+                                  "Esto sugiere que, con un nivel de significatividad de 0.05,",
+                                  "la variable", x_nombre_completo, "es", significatividad,
+                                  "en la predicción de", y_nombre_completo, ".")
 
-  return(mensaje)
+  # Información sobre heterocedasticidad
+  if (corregido) {
+    mensaje_hetero <- "Se detectó heterocedasticidad en los residuos y se corrigieron los errores estándar."
+  } else {
+    mensaje_hetero <- "No se detectó heterocedasticidad en los residuos."
+  }
+
+  # Combinar los mensajes
+  mensaje_final <- paste(mensaje_interpretacion, mensaje_hetero,
+                         "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+
+  return(mensaje_final)
 }
 
-# Ejemplo de uso:
-modelo <- lm(mpg ~ wt, data = mtcars)
 
-modelo1 <- lm(qsec ~ gear, data = mtcars)
 
-interpretar_coeficiente(modelo1)
