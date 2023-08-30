@@ -1,4 +1,4 @@
-interpretar_coeficiente <- function(modelo, x_nombre_completo, y_nombre_completo) {
+Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   # Cargar las librerías necesarias
   if (!requireNamespace("car", quietly = TRUE)) {
@@ -15,6 +15,21 @@ interpretar_coeficiente <- function(modelo, x_nombre_completo, y_nombre_completo
     install.packages("lmtest")
   }
   library(lmtest)
+
+  # Obtener los nombres de las variables del modelo si no son especificados
+  if (is.null(x) || is.null(y)) {
+    variables <- as.character(attr(terms(modelo), "variables"))
+    y_default <- variables[2]
+    x_default <- variables[length(variables)]
+  }
+
+  if (is.null(x)) {
+    x <- x_default
+  }
+
+  if (is.null(y)) {
+    y <- y_default
+  }
 
 
   # Evaluar homocedasticidad
@@ -34,9 +49,9 @@ interpretar_coeficiente <- function(modelo, x_nombre_completo, y_nombre_completo
   coef_p_valor <- modelo_coef$coefficients[2, 4]
 
   if (coef_valor > 0) {
-    direccion <- "un aumento"
+    direccion <- "aumenta"
   } else {
-    direccion <- "una disminución"
+    direccion <- "disminuye"
   }
 
   nivel_confianza <- (1 - coef_p_valor) * 100
@@ -52,35 +67,61 @@ interpretar_coeficiente <- function(modelo, x_nombre_completo, y_nombre_completo
     hipotesis <- "no se rechaza la hipótesis nula"
   }
 
-  cambio <- paste("Por cada incremento unitario en", x_nombre_completo,
-                  ", la", y_nombre_completo, "cambia en", round(coef_valor, 2), "unidades.")
+  cambio <- paste("Por cada incremento unitario en", x,
+                  ", la variable", y, direccion, "en", round(coef_valor, 2), "unidades.")
 
   if(coef_p_valor >= 0.05) {
-    alerta <- paste("¡Alerta! El coeficiente para", x_nombre_completo,
+    alerta <- paste("¡Alerta! El coeficiente para", x,
                     "no es estadísticamente significativo con un valor p de", round(coef_p_valor, 3), ".")
     cambio <- paste(alerta, cambio)
   }
 
-  mensaje_interpretacion <- paste(cambio,
-                                  "Con un nivel de confianza del", round(nivel_confianza, 2), "%,",
-                                  "este efecto es", significatividad, "y", hipotesis, ".",
-                                  "Esto sugiere que, con un nivel de significatividad de 0.05,",
-                                  "la variable", x_nombre_completo, "es", significatividad,
-                                  "en la predicción de", y_nombre_completo, ".")
+  coef_valor <- coef(modelo)[2]
+  coef_p_valor <- summary(modelo)$coefficients[2, 4]
 
-  # Información sobre heterocedasticidad
-  if (corregido) {
-    mensaje_hetero <- "Se detectó heterocedasticidad en los residuos y se corrigieron los errores estándar."
+  p_valor_texto <- ifelse(coef_p_valor < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_valor))
+
+  if (coef_valor > 0) {
+    direccion <- "aumenta"
   } else {
-    mensaje_hetero <- "No se detectó heterocedasticidad en los residuos."
+    direccion <- "disminuye"
   }
 
-  # Combinar los mensajes
-  mensaje_final <- paste(mensaje_interpretacion, mensaje_hetero,
-                         "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+  determinacion_impacto <- ifelse(coef_p_valor < alfa, "significativo", "no significativo")
+  decision_hipotesis <- ifelse(coef_p_valor < alfa, "se rechaza", "no se rechaza")
+
+  cambio <- paste("Por cada incremento unitario en el predictor", x, ", la variable", y, direccion, "en", round(coef_valor, 2), "unidades.")
+
+  mensaje_interpretacion <- paste(cambio,
+                                  "Este efecto tiene un p-valor de", p_valor_texto, "y, al usar un nivel de significatividad de", alfa, ",",
+                                  decision_hipotesis, "la hipótesis nula y se indica que la variable", x,
+                                  "tiene un impacto", determinacion_impacto, "en la predicción de", y, ".")
+
+  mensaje_hetero <- NULL
+
+  if (coef_p_valor < alfa) {
+    # Solo revisar y reportar heterocedasticidad si el modelo es significativo.
+    bptest_result <- bptest(modelo)
+    corregido <- FALSE
+
+    if (bptest_result$p.value < 0.05) {
+      # Hay evidencia de heterocedasticidad, corregir errores estándar
+      modelo <- coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
+      corregido <- TRUE
+      mensaje_hetero <- "Se detectó heterocedasticidad en los residuos y se corrigieron los errores estándar."
+    } else {
+      mensaje_hetero <- "No se detectó heterocedasticidad en los residuos."
+    }
+  }
+
+  # Combinar los mensajes si el mensaje_hetero existe
+  if (!is.null(mensaje_hetero)) {
+    mensaje_final <- paste(mensaje_interpretacion, mensaje_hetero,
+                           "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+  } else {
+    mensaje_final <- paste(mensaje_interpretacion,
+                           "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+  }
 
   return(mensaje_final)
 }
-
-
-
