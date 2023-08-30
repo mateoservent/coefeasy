@@ -1,10 +1,10 @@
 Package: Coeffeasy
-Title: What the Package Does (One Line, Title Case)
+Title: Coeffeasy is an R package for making regression coefficients more accessible. With this tool, you can plot and read many key coefficients instantly.
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Mateo", "Servent", , "mateoservent@gmail.com",
+           )
+Description: The package offers tools to interpret statistical model results in natural language. It covers linear and logit models, evaluates model assumptions such as heteroscedasticity, and presents results in a comprehensible manner. Users can choose between different languages for output, enhancing the accessibility and understanding of complex analyses.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
