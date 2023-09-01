@@ -15,7 +15,7 @@ Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
     y <- y_default
   }
 
-  coef_valor <- coef(modelo)[2]
+  coef_valor <- stats::coef(modelo)[2]
   coef_p_valor <- summary(modelo)$coefficients[2, 4]
 
   # Transformar log-odds a probabilidades

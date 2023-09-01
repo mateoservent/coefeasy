@@ -1,20 +1,5 @@
 Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
-  # Cargar las librerías necesarias
-  if (!requireNamespace("car", quietly = TRUE)) {
-    install.packages("car")
-  }
-  library(car)
-
-  if (!requireNamespace("sandwich", quietly = TRUE)) {
-    install.packages("sandwich")
-  }
-  library(sandwich)
-
-  if (!requireNamespace("lmtest", quietly = TRUE)) {
-    install.packages("lmtest")
-  }
-  library(lmtest)
 
   # Obtener los nombres de las variables del modelo si no son especificados
   if (is.null(x) || is.null(y)) {
@@ -31,21 +16,20 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
     y <- y_default
   }
 
-
   # Evaluar homocedasticidad
-  bptest_result <- bptest(modelo)
+  bptest_result <- lmtest::bptest(modelo)
   corregido <- FALSE
 
   if (bptest_result$p.value < 0.05) {
     # Hay evidencia de heterocedasticidad, corregir errores estándar
-    modelo_coef <- coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
+    modelo_coef <- lmtest::coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
     corregido <- TRUE
   } else {
     # No hay evidencia de heterocedasticidad, usar errores estándar regulares
     modelo_coef <- summary(modelo)
   }
 
-  coef_valor <- coef(modelo)[2]
+  coef_valor <- stats::coef(modelo)[2]
   coef_p_valor <- modelo_coef$coefficients[2, 4]
 
   if (coef_valor > 0) {
@@ -76,7 +60,7 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
     cambio <- paste(alerta, cambio)
   }
 
-  coef_valor <- coef(modelo)[2]
+  coef_valor <- stats::coef(modelo)[2]
   coef_p_valor <- summary(modelo)$coefficients[2, 4]
 
   p_valor_texto <- ifelse(coef_p_valor < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_valor))
@@ -101,12 +85,12 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   if (coef_p_valor < alfa) {
     # Solo revisar y reportar heterocedasticidad si el modelo es significativo.
-    bptest_result <- bptest(modelo)
+    bptest_result <- lmtest::bptest(modelo)
     corregido <- FALSE
 
     if (bptest_result$p.value < 0.05) {
       # Hay evidencia de heterocedasticidad, corregir errores estándar
-      modelo <- coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
+      modelo <- lmtest::coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
       corregido <- TRUE
       mensaje_hetero <- "Se detectó heterocedasticidad en los residuos y se corrigieron los errores estándar."
     } else {
