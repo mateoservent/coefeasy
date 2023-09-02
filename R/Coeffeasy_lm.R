@@ -12,11 +12,6 @@
 #' potential heteroskedasticity in the residuals, and the corresponding correction of standard errors.
 #'
 #' @export
-#'
-#' @examples
-#' # Using the mtcars dataset
-#' linear_model <- lm(mpg ~ wt, data = mtcars)
-#' Coeffeasy_lm(linear_model)
 Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
 
