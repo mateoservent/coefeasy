@@ -23,8 +23,3 @@ potential heteroskedasticity in the residuals, and the corresponding correction 
 This function provides an easy interpretation of coefficients from linear regression models,
 taking into consideration potential heteroskedasticity.
 }
-\examples{
-# Using the mtcars dataset
-linear_model <- lm(mpg ~ wt, data = mtcars)
-Coeffeasy_lm(linear_model)
-}
