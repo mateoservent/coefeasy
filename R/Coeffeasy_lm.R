@@ -1,3 +1,22 @@
+#' Interpretation of Coefficients for Linear Regression Models
+#'
+#' This function provides an easy interpretation of coefficients from linear regression models,
+#' taking into consideration potential heteroskedasticity.
+#'
+#' @param modelo An object of class `lm` representing the linear regression model.
+#' @param x A character string specifying the predictor variable. If not specified, it tries to determine it from the model.
+#' @param y A character string specifying the response variable. If not specified, it tries to determine it from the model.
+#' @param alfa A numeric value for the significance level. Default is 0.05.
+#'
+#' @return A character string with the interpretation of the model coefficient,
+#' potential heteroskedasticity in the residuals, and the corresponding correction of standard errors.
+#'
+#' @export
+#'
+#' @examples
+#' # Using the mtcars dataset
+#' linear_model <- lm(mpg ~ wt, data = mtcars)
+#' Coeffeasy_lm(linear_model)
 Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
 

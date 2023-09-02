@@ -44,3 +44,5 @@ Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   return(mensaje_interpretacion)
 }
+
+library(roxygen2)
