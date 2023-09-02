@@ -2,3 +2,5 @@
 
 export(Coeffeasy_lm)
 export(Coeffeasy_logit)
+importFrom(lmtest,bptest)
+importFrom(lmtest,coeftest)

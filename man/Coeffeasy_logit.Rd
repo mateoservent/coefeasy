@@ -2,24 +2,24 @@
 % Please edit documentation in R/Coeffeasy_logit.R
 \name{Coeffeasy_logit}
 \alias{Coeffeasy_logit}
-\title{Interpreta fácilmente los coeficientes de un modelo logístico.}
+\title{Easily interpret the coefficients of a logistic model.}
 \usage{
 Coeffeasy_logit(modelo, x = NULL, y = NULL, alfa = 0.05)
 }
 \arguments{
-\item{modelo}{Un objeto de modelo de tipo glm con familia binomial (modelo logístico).}
+\item{modelo}{A glm object with binomial family (logistic model).}
 
-\item{x}{Nombre de la variable predictora de interés (carácter). Si es NULL, la función intentará identificarla automáticamente.}
+\item{x}{Name of the predictor variable of interest (character). If NULL, the function will try to identify it automatically.}
 
-\item{y}{Nombre de la variable de respuesta (carácter). Si es NULL, la función intentará identificarla automáticamente.}
+\item{y}{Name of the response variable (character). If NULL, the function will try to identify it automatically.}
 
-\item{alfa}{Nivel de significatividad para pruebas de hipótesis. El valor predeterminado es 0.05.}
+\item{alfa}{Significance level for hypothesis testing. The default value is 0.05.}
 }
 \value{
-Una cadena de texto con la interpretación de los coeficientes del modelo logístico.
+A text string with the interpretation of the logistic model's coefficients.
 }
 \description{
-Esta función toma un modelo logístico y devuelve una interpretación simplificada
-de los coeficientes, especialmente enfocado en el cambio en la probabilidad
-asociado con un cambio unitario en la variable predictora.
+This function takes a logistic model and returns a simplified interpretation
+of the coefficients, focusing especially on the change in probability
+associated with a unit change in the predictor variable.
 }

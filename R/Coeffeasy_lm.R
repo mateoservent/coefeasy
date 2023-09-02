@@ -1,7 +1,7 @@
 #' Interpretation of Coefficients for Linear Regression Models
 #'
 #' This function provides an easy interpretation of coefficients from linear regression models,
-#' taking into consideration potential heteroskedasticity.
+#' considering potential heteroskedasticity.
 #'
 #' @param modelo An object of class `lm` representing the linear regression model.
 #' @param x A character string specifying the predictor variable. If not specified, it tries to determine it from the model.
@@ -11,11 +11,11 @@
 #' @return A character string with the interpretation of the model coefficient,
 #' potential heteroskedasticity in the residuals, and the corresponding correction of standard errors.
 #'
+#' @importFrom lmtest bptest coeftest
+#'
 #' @export
 Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
-
-
-  # Obtener los nombres de las variables del modelo si no son especificados
+  # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
     variables <- as.character(attr(terms(modelo), "variables"))
     y_default <- variables[2]
@@ -30,16 +30,16 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
     y <- y_default
   }
 
-  # Evaluar homocedasticidad
+  # Evaluate homoscedasticity
   bptest_result <- lmtest::bptest(modelo)
-  corregido <- FALSE
+  corrected <- FALSE
 
   if (bptest_result$p.value < 0.05) {
-    # Hay evidencia de heterocedasticidad, corregir errores estándar
+    # There's evidence of heteroskedasticity, correct standard errors
     modelo_coef <- lmtest::coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
-    corregido <- TRUE
+    corrected <- TRUE
   } else {
-    # No hay evidencia de heterocedasticidad, usar errores estándar regulares
+    # No evidence of heteroskedasticity, use regular standard errors
     modelo_coef <- summary(modelo)
   }
 
@@ -56,21 +56,21 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   if (coef_p_valor < 0.01) {
     significatividad <- paste("altamente significativo (p <", 0.01, ")")
-    hipotesis <- "se rechaza la hipótesis nula"
+    hipotesis <- "se rechaza la hipotesis nula"
   } else if (coef_p_valor < 0.05) {
     significatividad <- paste("significativo (p <", 0.05, ")")
-    hipotesis <- "se rechaza la hipótesis nula"
+    hipotesis <- "se rechaza la hipotesis nula"
   } else {
     significatividad <- paste("no es significativo (p =", round(coef_p_valor, 3), ")")
-    hipotesis <- "no se rechaza la hipótesis nula"
+    hipotesis <- "no se rechaza la hipotesis nula"
   }
 
   cambio <- paste("Por cada incremento unitario en", x,
                   ", la variable", y, direccion, "en", round(coef_valor, 2), "unidades.")
 
   if(coef_p_valor >= 0.05) {
-    alerta <- paste("¡Alerta! El coeficiente para", x,
-                    "no es estadísticamente significativo con un valor p de", round(coef_p_valor, 3), ".")
+    alerta <- paste("Alerta, el coeficiente para", x,
+                    "no es estadisticamente significativo con un valor p de", round(coef_p_valor, 3), ".")
     cambio <- paste(alerta, cambio)
   }
 
@@ -92,8 +92,8 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   mensaje_interpretacion <- paste(cambio,
                                   "Este efecto tiene un p-valor de", p_valor_texto, "y, al usar un nivel de significatividad de", alfa, ",",
-                                  decision_hipotesis, "la hipótesis nula y se indica que la variable", x,
-                                  "tiene un impacto", determinacion_impacto, "en la predicción de", y, ".")
+                                  decision_hipotesis, "la hipotesis nula y se indica que la variable", x,
+                                  "tiene un impacto", determinacion_impacto, "en la prediccion de", y, ".")
 
   mensaje_hetero <- NULL
 
@@ -103,22 +103,22 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
     corregido <- FALSE
 
     if (bptest_result$p.value < 0.05) {
-      # Hay evidencia de heterocedasticidad, corregir errores estándar
+      # Hay evidencia de heterocedasticidad, corregir errores estandar
       modelo <- lmtest::coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
       corregido <- TRUE
-      mensaje_hetero <- "Se detectó heterocedasticidad en los residuos y se corrigieron los errores estándar."
+      mensaje_hetero <- "Se detecto heterocedasticidad en los residuos y se corrigieron los errores estandar."
     } else {
-      mensaje_hetero <- "No se detectó heterocedasticidad en los residuos."
+      mensaje_hetero <- "No se detecto heterocedasticidad en los residuos."
     }
   }
 
   # Combinar los mensajes si el mensaje_hetero existe
   if (!is.null(mensaje_hetero)) {
     mensaje_final <- paste(mensaje_interpretacion, mensaje_hetero,
-                           "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+                           "Recuerde que esta funcion interpreta el resultado del modelo tal como ha sido presentado.")
   } else {
     mensaje_final <- paste(mensaje_interpretacion,
-                           "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+                           "Recuerde que esta funcion interpreta el resultado del modelo tal como ha sido presentado.")
   }
 
   return(mensaje_final)

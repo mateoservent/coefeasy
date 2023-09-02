@@ -21,5 +21,5 @@ potential heteroskedasticity in the residuals, and the corresponding correction 
 }
 \description{
 This function provides an easy interpretation of coefficients from linear regression models,
-taking into consideration potential heteroskedasticity.
+considering potential heteroskedasticity.
 }

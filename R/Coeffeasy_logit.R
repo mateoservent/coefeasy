@@ -1,20 +1,19 @@
-#' Interpreta fácilmente los coeficientes de un modelo logístico.
+#' Easily interpret the coefficients of a logistic model.
 #'
-#' Esta función toma un modelo logístico y devuelve una interpretación simplificada
-#' de los coeficientes, especialmente enfocado en el cambio en la probabilidad
-#' asociado con un cambio unitario en la variable predictora.
+#' This function takes a logistic model and returns a simplified interpretation
+#' of the coefficients, focusing especially on the change in probability
+#' associated with a unit change in the predictor variable.
 #'
-#' @param modelo Un objeto de modelo de tipo glm con familia binomial (modelo logístico).
-#' @param x Nombre de la variable predictora de interés (carácter). Si es NULL, la función intentará identificarla automáticamente.
-#' @param y Nombre de la variable de respuesta (carácter). Si es NULL, la función intentará identificarla automáticamente.
-#' @param alfa Nivel de significatividad para pruebas de hipótesis. El valor predeterminado es 0.05.
+#' @param modelo A glm object with binomial family (logistic model).
+#' @param x Name of the predictor variable of interest (character). If NULL, the function will try to identify it automatically.
+#' @param y Name of the response variable (character). If NULL, the function will try to identify it automatically.
+#' @param alfa Significance level for hypothesis testing. The default value is 0.05.
 #'
-#' @return Una cadena de texto con la interpretación de los coeficientes del modelo logístico.
+#' @return A text string with the interpretation of the logistic model's coefficients.
 #'
 #' @export
 Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
-
-  # Obtener los nombres de las variables del modelo si no son especificados
+  # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
     variables <- as.character(attr(terms(modelo), "variables"))
     y_default <- variables[2]
@@ -29,32 +28,33 @@ Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
     y <- y_default
   }
 
-  coef_valor <- stats::coef(modelo)[2]
-  coef_p_valor <- summary(modelo)$coefficients[2, 4]
+  coef_value <- stats::coef(modelo)[2]
+  coef_p_value <- summary(modelo)$coefficients[2, 4]
 
-  # Transformar log-odds a probabilidades
-  probabilidad <- exp(coef_valor) / (1 + exp(coef_valor))
+  # Convert log-odds to probabilities
+  probability <- exp(coef_value) / (1 + exp(coef_value))
 
-  if (coef_valor > 0) {
-    direccion <- "aumenta"
+  if (coef_value > 0) {
+    direction <- "increases"
   } else {
-    direccion <- "disminuye"
+    direction <- "decreases"
   }
 
-  p_valor_texto <- ifelse(coef_p_valor < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_valor))
+  p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
 
-  determinacion_impacto <- ifelse(coef_p_valor < alfa, "significativo", "no significativo")
-  decision_hipotesis <- ifelse(coef_p_valor < alfa, "se rechaza", "no se rechaza")
+  significance_impact <- ifelse(coef_p_value < alfa, "significant", "not significant")
+  hypothesis_decision <- ifelse(coef_p_value < alfa, "is rejected", "is not rejected")
 
-  cambio <- paste("Si", x, "sube en una unidad, la probabilidad de", y, direccion, "en", round(probabilidad * 100, 2), "puntos porcentuales.")
+  change <- paste("If", x, "increases by one unit, the probability of", y, direction, "by", round(probability * 100, 2), "percentage points.")
 
-  lectura_accesible <- paste("si", x, "aumenta, es más probable que", y, "ocurra.")
+  accessible_reading <- paste("if", x, "increases, it is more likely that", y, "occurs.")
 
-  mensaje_interpretacion <- paste(cambio, "Esto significa que", lectura_accesible,
-                                  "Este efecto tiene un p-valor de", p_valor_texto, "y, al usar un nivel de significatividad de", alfa, ",",
-                                  decision_hipotesis, "la hipótesis nula. Esto sugiere que", x,
-                                  "impacta significativamente en las posibilidades de", y, ".",
-                                  "Recuerde que esta función interpreta el resultado del modelo tal como ha sido presentado.")
+  interpretation_message <- paste(change, "This means that", accessible_reading,
+                                  "This effect has a p-value of", p_value_text, "and, using a significance level of", alfa, ",",
+                                  "the null hypothesis", hypothesis_decision, ". This suggests that", x,
+                                  "significantly impacts the chances of", y, ".",
+                                  "Remember that this function interprets the model's result as it has been presented.")
 
-  return(mensaje_interpretacion)
+  return(interpretation_message)
 }
+

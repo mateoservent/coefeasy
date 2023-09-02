@@ -6,6 +6,8 @@ Authors@R:
            )
 Description: The package offers tools to interpret statistical model results in natural language. It covers linear and logit models, evaluates model assumptions such as heteroscedasticity, and presents results in a comprehensible manner. Users can choose between different languages for output, enhancing the accessibility and understanding of complex analyses.
 License: MIT + file LICENSE
+Imports:
+  lmtest
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
