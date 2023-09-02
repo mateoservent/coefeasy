@@ -1,3 +1,17 @@
+#' Interpreta fácilmente los coeficientes de un modelo logístico.
+#'
+#' Esta función toma un modelo logístico y devuelve una interpretación simplificada
+#' de los coeficientes, especialmente enfocado en el cambio en la probabilidad
+#' asociado con un cambio unitario en la variable predictora.
+#'
+#' @param modelo Un objeto de modelo de tipo glm con familia binomial (modelo logístico).
+#' @param x Nombre de la variable predictora de interés (carácter). Si es NULL, la función intentará identificarla automáticamente.
+#' @param y Nombre de la variable de respuesta (carácter). Si es NULL, la función intentará identificarla automáticamente.
+#' @param alfa Nivel de significatividad para pruebas de hipótesis. El valor predeterminado es 0.05.
+#'
+#' @return Una cadena de texto con la interpretación de los coeficientes del modelo logístico.
+#'
+#' @export
 Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   # Obtener los nombres de las variables del modelo si no son especificados
@@ -44,5 +58,3 @@ Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   return(mensaje_interpretacion)
 }
-
-library(roxygen2)
