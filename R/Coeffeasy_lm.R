@@ -45,55 +45,54 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   coef_valor <- stats::coef(modelo)[2]
   coef_p_valor <- modelo_coef$coefficients[2, 4]
-
-  if (coef_valor > 0) {
-    direccion <- "aumenta"
+  if (coef_value > 0) {
+    direction <- "increases"
   } else {
-    direccion <- "disminuye"
+    direction <- "decreases"
   }
 
-  nivel_confianza <- (1 - coef_p_valor) * 100
+  confidence_level <- (1 - coef_p_value) * 100
 
-  if (coef_p_valor < 0.01) {
-    significatividad <- paste("altamente significativo (p <", 0.01, ")")
-    hipotesis <- "se rechaza la hipotesis nula"
-  } else if (coef_p_valor < 0.05) {
-    significatividad <- paste("significativo (p <", 0.05, ")")
-    hipotesis <- "se rechaza la hipotesis nula"
+  if (coef_p_value < 0.01) {
+    significance <- paste("highly significant (p <", 0.01, ")")
+    hypothesis <- "null hypothesis is rejected"
+  } else if (coef_p_value < 0.05) {
+    significance <- paste("significant (p <", 0.05, ")")
+    hypothesis <- "null hypothesis is rejected"
   } else {
-    significatividad <- paste("no es significativo (p =", round(coef_p_valor, 3), ")")
-    hipotesis <- "no se rechaza la hipotesis nula"
+    significance <- paste("not significant (p =", round(coef_p_value, 3), ")")
+    hypothesis <- "null hypothesis is not rejected"
   }
 
-  cambio <- paste("Por cada incremento unitario en", x,
-                  ", la variable", y, direccion, "en", round(coef_valor, 2), "unidades.")
+  change <- paste("For every unit increase in", x,
+                  ", the variable", y, direction, "by", round(coef_value, 2), "units.")
 
-  if(coef_p_valor >= 0.05) {
-    alerta <- paste("Alerta, el coeficiente para", x,
-                    "no es estadisticamente significativo con un valor p de", round(coef_p_valor, 3), ".")
-    cambio <- paste(alerta, cambio)
+  if(coef_p_value >= 0.05) {
+    alert <- paste("Alert, the coefficient for", x,
+                   "is not statistically significant with a p-value of", round(coef_p_value, 3), ".")
+    change <- paste(alert, change)
   }
 
-  coef_valor <- stats::coef(modelo)[2]
-  coef_p_valor <- summary(modelo)$coefficients[2, 4]
+  coef_value <- stats::coef(model)[2]
+  coef_p_value <- summary(model)$coefficients[2, 4]
 
-  p_valor_texto <- ifelse(coef_p_valor < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_valor))
+  p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
 
-  if (coef_valor > 0) {
-    direccion <- "aumenta"
+  if (coef_value > 0) {
+    direction <- "increases"
   } else {
-    direccion <- "disminuye"
+    direction <- "decreases"
   }
 
-  determinacion_impacto <- ifelse(coef_p_valor < alfa, "significativo", "no significativo")
-  decision_hipotesis <- ifelse(coef_p_valor < alfa, "se rechaza", "no se rechaza")
+  impact_determination <- ifelse(coef_p_value < alpha, "significant", "not significant")
+  hypothesis_decision <- ifelse(coef_p_value < alpha, "is rejected", "is not rejected")
 
-  cambio <- paste("Por cada incremento unitario en el predictor", x, ", la variable", y, direccion, "en", round(coef_valor, 2), "unidades.")
+  change <- paste("For every unit increase in the predictor", x, ", the variable", y, direction, "by", round(coef_value, 2), "units.")
 
-  mensaje_interpretacion <- paste(cambio,
-                                  "Este efecto tiene un p-valor de", p_valor_texto, "y, al usar un nivel de significatividad de", alfa, ",",
-                                  decision_hipotesis, "la hipotesis nula y se indica que la variable", x,
-                                  "tiene un impacto", determinacion_impacto, "en la prediccion de", y, ".")
+  interpretation_message <- paste(change,
+                                  "This effect has a p-value of", p_value_text, "and, using a significance level of", alpha, ",",
+                                  hypothesis_decision, "the null hypothesis and it indicates that the variable", x,
+                                  "has a", impact_determination, "impact on predicting", y, ".")
 
   mensaje_hetero <- NULL
 
