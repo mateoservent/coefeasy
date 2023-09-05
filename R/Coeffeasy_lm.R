@@ -94,31 +94,31 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
                                   hypothesis_decision, "the null hypothesis and it indicates that the variable", x,
                                   "has a", impact_determination, "impact on predicting", y, ".")
 
-  mensaje_hetero <- NULL
+  hetero_message <- NULL
 
-  if (coef_p_valor < alfa) {
-    # Solo revisar y reportar heterocedasticidad si el modelo es significativo.
-    bptest_result <- lmtest::bptest(modelo)
-    corregido <- FALSE
+  if (coef_p_value < alpha) {
+    # Only check and report heteroscedasticity if the model is significant.
+    bptest_result <- lmtest::bptest(model)
+    corrected <- FALSE
 
     if (bptest_result$p.value < 0.05) {
-      # Hay evidencia de heterocedasticidad, corregir errores estandar
-      modelo <- lmtest::coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
-      corregido <- TRUE
-      mensaje_hetero <- "Se detecto heterocedasticidad en los residuos y se corrigieron los errores estandar."
+      # Evidence of heteroscedasticity detected, correct standard errors
+      model <- lmtest::coeftest(model, vcov = vcovHC(model, type = "HC2"))
+      corrected <- TRUE
+      hetero_message <- "Heteroscedasticity was detected in the residuals and standard errors were corrected."
     } else {
-      mensaje_hetero <- "No se detecto heterocedasticidad en los residuos."
+      hetero_message <- "No heteroscedasticity was detected in the residuals."
     }
   }
 
-  # Combinar los mensajes si el mensaje_hetero existe
-  if (!is.null(mensaje_hetero)) {
-    mensaje_final <- paste(mensaje_interpretacion, mensaje_hetero,
-                           "Recuerde que esta funcion interpreta el resultado del modelo tal como ha sido presentado.")
+  # Combine the messages if hetero_message exists
+  if (!is.null(hetero_message)) {
+    final_message <- paste(interpretation_message, hetero_message,
+                           "Remember that this function interprets the model result as it has been presented.")
   } else {
-    mensaje_final <- paste(mensaje_interpretacion,
-                           "Recuerde que esta funcion interpreta el resultado del modelo tal como ha sido presentado.")
+    final_message <- paste(interpretation_message,
+                           "Remember that this function interprets the model result as it has been presented.")
   }
 
-  return(mensaje_final)
+  return(final_message)
 }
