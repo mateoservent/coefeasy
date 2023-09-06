@@ -21,27 +21,28 @@ Coeffeasy_multinom <- function(modelo, x = NULL, alfa = 0.05) {
   # Loop over each level of the dependent variable (excluding reference category)
   interpretations <- list()
   for (level in rownames(coef(modelo))) {
-    coef_value <- stats::coef(modelo)[level, x]
-    coef_p_value <- summary(modelo)$coefficients[level, pmatch(x, colnames(stats::coef(modelo)))]
+    coef_value <- coef(modelo)[level, x]
+    coef_p_value <- summary(modelo)$coefficients[level, pmatch(x, colnames(coef(modelo)))]
 
     if (coef_value > 0) {
       direction <- "increases"
+      impact <- "more likely"
     } else {
       direction <- "decreases"
+      impact <- "less likely"
     }
 
     p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
-    significance_impact <- ifelse(coef_p_value < alfa, "significant", "not significant")
     hypothesis_decision <- ifelse(coef_p_value < alfa, "is rejected", "is not rejected")
 
-    change <- paste("For the level", level, "of the response variable: If", x, "increases by one unit, the log-odds of being in this level relative to the reference level", direction, "by", round(coef_value, 2), "units.")
-    accessible_reading <- paste("For the level", level, ": if", x, "increases, it is more likely that this level occurs relative to the reference level.")
+    change <- paste("For vehicles with", level, "cylinders: If", x, "increases by one unit, the log-odds of being in this level relative to the reference level", direction, "by", round(coef_value, 2), "units.")
+    accessible_reading <- paste("This suggests that, when", x, "increases, it becomes", impact, "for a vehicle to have", level, "cylinders relative to the reference level.")
 
-    interpretation_message <- paste(change, "This means that", accessible_reading,
+    interpretation_message <- paste(change, accessible_reading,
                                     "This effect has a p-value of", p_value_text, "and, using a significance level of", alfa, ",",
-                                    "the null hypothesis", hypothesis_decision, ". This suggests that", x,
-                                    "significantly impacts the chances of being in this level relative to the reference level.",
-                                    "Remember that this function interprets the model's result as it has been presented.")
+                                    "the null hypothesis", hypothesis_decision, ". This indicates that", x,
+                                    "has a statistically significant impact on the likelihood of a vehicle having", level, "cylinders relative to the reference level.")
+
     interpretations[[level]] <- interpretation_message
   }
 
