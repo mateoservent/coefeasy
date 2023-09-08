@@ -17,7 +17,7 @@ remotes::install_github("mateoservent/Coeffeasy")
 
 ## Example 
 
-In this example, we use Coeffeasy_lm() to interpret coefficients from a linear regression on the mtcars dataset, analyzing how car weight affects miles per gallon when controlling for horsepower and quarter mile time.
+In this example, we use `Coeffeasy_lm()` to interpret coefficients from a linear regression on the mtcars dataset, analyzing how car weight affects miles per gallon when controlling for horsepower and quarter mile time.
 
 ``` r
 
