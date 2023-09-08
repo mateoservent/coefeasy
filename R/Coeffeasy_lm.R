@@ -3,21 +3,21 @@
 #' This function provides an easy interpretation of coefficients from linear regression models,
 #' considering potential heteroskedasticity.
 #'
-#' @param modelo An object of class `lm` representing the linear regression model.
+#' @param model An object of class `lm` representing the linear regression model.
 #' @param x A character string specifying the predictor variable. If not specified, it tries to determine it from the model.
 #' @param y A character string specifying the response variable. If not specified, it tries to determine it from the model.
-#' @param alfa A numeric value for the significance level. Default is 0.05.
+#' @param alpha A numeric value for the significance level. Default is 0.05.
 #'
 #' @return A character string with the interpretation of the model coefficient,
 #' potential heteroskedasticity in the residuals, and the corresponding correction of standard errors.
 #'
-#' @importFrom lmtest bptest coeftest
+#' @importFrom lmtest bptest coeftest sandwich
 #'
 #' @export
-Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
+Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05) {
   # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
-    variables <- as.character(attr(terms(modelo), "variables"))
+    variables <- as.character(attr(terms(model), "variables"))
     y_default <- variables[2]
     x_default <- variables[length(variables)]
   }
@@ -31,20 +31,20 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
   }
 
   # Evaluate homoscedasticity
-  bptest_result <- lmtest::bptest(modelo)
+  bptest_result <- lmtest::bptest(model)
   corrected <- FALSE
 
   if (bptest_result$p.value < 0.05) {
     # There's evidence of heteroskedasticity, correct standard errors
-    modelo_coef <- lmtest::coeftest(modelo, vcov = vcovHC(modelo, type = "HC2"))
+    model_coef <- lmtest::coeftest(model, vcov = vcovHC(model, type = "HC2"))
     corrected <- TRUE
   } else {
     # No evidence of heteroskedasticity, use regular standard errors
-    modelo_coef <- summary(modelo)
+    model_coef <- summary(model)
   }
 
-  coef_valor <- stats::coef(modelo)[2]
-  coef_p_valor <- modelo_coef$coefficients[2, 4]
+  coef_value <- stats::coef(model)[2]
+  coef_p_value <- model_coef$coefficients[2, 4]
   if (coef_value > 0) {
     direction <- "increases"
   } else {
@@ -103,7 +103,7 @@ Coeffeasy_lm <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
     if (bptest_result$p.value < 0.05) {
       # Evidence of heteroscedasticity detected, correct standard errors
-      model <- lmtest::coeftest(model, vcov = vcovHC(model, type = "HC2"))
+      model <- lmtest::coeftest(model, vcov = sandwich::vcovHC(model, type = "HC2"))
       corrected <- TRUE
       hetero_message <- "Heteroscedasticity was detected in the residuals and standard errors were corrected."
     } else {
