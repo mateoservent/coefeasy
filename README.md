@@ -28,9 +28,11 @@ model <- lm(mpg ~ wt, data = mtcars)
 
 # Use Coeffeasy's function to interpret the coefficients
 
-Coeffeasy_lm(model) # All default
+# Everything as default
+Coeffeasy_lm(model) 
 
-Coeffeasy_lm(model, y = "Miles per gallon", x = "Weight (1000 lbs)", alpha = 0.01) # With setting
+# With setting
+Coeffeasy_lm(model, y = "Miles per gallon", x = "Weight (1000 lbs)", alpha = 0.01) 
 
 ```
 
