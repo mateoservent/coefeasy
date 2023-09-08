@@ -17,22 +17,24 @@ remotes::install_github("mateoservent/Coeffeasy")
 
 ## Example 
 
-
+In this example, we use Coeffeasy_lm() to interpret coefficients from a linear regression on the mtcars dataset, analyzing how car weight affects miles per gallon when controlling for horsepower and quarter mile time.
 
 ``` r
 
 library(Coeffeasy)
 
-# Fit the model
-model <- lm(mpg ~ wt, data = mtcars)
+# Fit the linear regression model
+model <- lm(mpg ~ wt + hp + qsec, data = mtcars)
 
 # Use Coeffeasy's function to interpret the coefficients
 
-# Everything as default
+# Using the default settings, which automatically deduce variable names and use an alpha of 0.05
 Coeffeasy_lm(model) 
 
-# With setting
-Coeffeasy_lm(model, y = "Miles per gallon", x = "Weight (1000 lbs)", alpha = 0.01) 
+# Specifying the names of the response and predictor variables for a clearer interpretation, and adjusting the significance level
+Coeffeasy_lm(model, y = "Miles per gallon", x = "Car weight (1000 lbs)", alpha = 0.01) 
+
 
 ```
+
 
