@@ -7,12 +7,12 @@
 #' @param modelo A glm object with binomial family (logistic model).
 #' @param x Name of the predictor variable of interest (character). If NULL, the function will try to identify it automatically.
 #' @param y Name of the response variable (character). If NULL, the function will try to identify it automatically.
-#' @param alfa Significance level for hypothesis testing. The default value is 0.05.
+#' @param alpha Significance level for hypothesis testing. The default value is 0.05.
 #'
 #' @return A text string with the interpretation of the logistic model's coefficients.
 #'
 #' @export
-Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
+Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alpha = 0.05) {
   # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
     variables <- as.character(attr(terms(modelo), "variables"))
@@ -42,19 +42,17 @@ Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alfa = 0.05) {
 
   p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
 
-  significance_impact <- ifelse(coef_p_value < alfa, "significant", "not significant")
-  hypothesis_decision <- ifelse(coef_p_value < alfa, "is rejected", "is not rejected")
+  significance_impact <- ifelse(coef_p_value < alpha, "significant", "not significant")
+  hypothesis_decision <- ifelse(coef_p_value < alpha, "is rejected", "is not rejected")
 
   change <- paste("If", x, "increases by one unit, the probability of", y, direction, "by", round(probability * 100, 2), "percentage points.")
 
-  accessible_reading <- paste("if", x, "increases, it is more likely that", y, "occurs.")
 
-  interpretation_message <- paste(change, "This means that", accessible_reading,
-                                  "This effect has a p-value of", p_value_text, "and, using a significance level of", alfa, ",",
+  interpretation_message <- paste(change,
+                                  "This effect has a p-value of", p_value_text, "and, using a significance level of", alpha, ",",
                                   "the null hypothesis", hypothesis_decision, ". This suggests that", x,
-                                  "significantly impacts the chances of", y, ".",
+                                  "significantly affects the chances of", y, ".",
                                   "Remember that this function interprets the model's result as it has been presented.")
 
   return(interpretation_message)
 }
-
