@@ -15,7 +15,7 @@ remotes::install_github("mateoservent/Coeffeasy")
 
 ```
 
-## Example 
+## Example Linear Regression
 
 In this example, we use `Coeffeasy_lm()` to interpret coefficients from a linear regression on the mtcars dataset, analyzing how car weight affects miles per gallon when controlling for horsepower and quarter mile time.
 
@@ -34,6 +34,7 @@ Coeffeasy_lm(model)
 Coeffeasy_lm(model, y = "Miles per gallon", x = "Car weight (1000 lbs)", alpha = 0.01) 
 
 ```
+## Example Logistic Regression
 
 Second example, we use `Coeffeasy_logit()` to interpret coefficients from a logistic regression on the same dataset. We will analyze how the weight of the car affects the likelihood of a car having an automatic transmission (1 = Automatic; 0 = Manual).
 
