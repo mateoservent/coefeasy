@@ -4,16 +4,16 @@
 \alias{Coeffeasy_lm}
 \title{Interpretation of Coefficients for Linear Regression Models}
 \usage{
-Coeffeasy_lm(modelo, x = NULL, y = NULL, alfa = 0.05)
+Coeffeasy_lm(model, x = NULL, y = NULL, alpha = 0.05)
 }
 \arguments{
-\item{modelo}{An object of class \code{lm} representing the linear regression model.}
+\item{model}{An object of class \code{lm} representing the linear regression model.}
 
 \item{x}{A character string specifying the predictor variable. If not specified, it tries to determine it from the model.}
 
 \item{y}{A character string specifying the response variable. If not specified, it tries to determine it from the model.}
 
-\item{alfa}{A numeric value for the significance level. Default is 0.05.}
+\item{alpha}{A numeric value for the significance level. Default is 0.05.}
 }
 \value{
 A character string with the interpretation of the model coefficient,

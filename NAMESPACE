@@ -2,5 +2,7 @@
 
 export(Coeffeasy_lm)
 export(Coeffeasy_logit)
+export(Coeffeasy_multinom)
 importFrom(lmtest,bptest)
 importFrom(lmtest,coeftest)
+importFrom(lmtest,sandwich)
