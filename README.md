@@ -41,8 +41,6 @@ Second example, we use `Coeffeasy_logit()` to interpret coefficients from a logi
 # Fit the logistic regression model. Here, we're taking 'am' (Automatic Transmission) as the binary response.
 model_logit <- glm(am ~ wt, data = mtcars, family = "binomial")
 
-# Use Coeffeasy's function to interpret the coefficients
-
 # Using the default settings, which automatically deduce variable names and use an alpha of 0.05
 Coeffeasy_logit(model_logit) 
 
