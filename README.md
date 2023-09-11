@@ -39,7 +39,7 @@ Coeffeasy_lm(model, y = "Miles per gallon", x = "Car weight (1000 lbs)", alpha =
 Second example, we use `Coeffeasy_logit()` to interpret coefficients from a logistic regression on the same dataset. We will analyze how the weight of the car affects the likelihood of a car having an automatic transmission (1 = Automatic; 0 = Manual).
 
 ``` r
-# Fit the logistic regression model. Here, we're taking 'am' (Automatic Transmission) as the binary response.
+# Fit the logistic regression model
 model_logit <- glm(am ~ wt, data = mtcars, family = "binomial")
 
 # Using the default settings, which automatically deduce variable names and use an alpha of 0.05
