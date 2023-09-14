@@ -14,7 +14,7 @@
 #' @importFrom lmtest bptest coeftest sandwich
 #'
 #' @export
-Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05) {
+Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2") {
   # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
     variables <- as.character(attr(terms(model), "variables"))
@@ -22,103 +22,38 @@ Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05) {
     x_default <- variables[length(variables)]
   }
 
-  if (is.null(x)) {
-    x <- x_default
-  }
+  if (is.null(x)) x <- x_default
+  if (is.null(y)) y <- y_default
 
-  if (is.null(y)) {
-    y <- y_default
-  }
-
-  # Evaluate homoscedasticity
+  # Check for heteroskedasticity
   bptest_result <- lmtest::bptest(model)
-  corrected <- FALSE
+  hetero_message <- "No heteroscedasticity was detected in the residuals."
 
-  if (bptest_result$p.value < 0.05) {
-    # There's evidence of heteroskedasticity, correct standard errors
-    model_coef <- lmtest::coeftest(model, vcov = vcovHC(model, type = "HC2"))
-    corrected <- TRUE
+  if (bptest_result$p.value < alpha) {
+    # Heteroskedasticity detected, correct standard errors
+    model_coef <- lmtest::coeftest(model, vcov = sandwich::vcovHC(model, type = error))
+    hetero_message <- paste("Heteroscedasticity was detected in the residuals and standard errors were corrected with", error, "formula.")
   } else {
-    # No evidence of heteroskedasticity, use regular standard errors
-    model_coef <- summary(model)
+    model_coef <- summary(model)$coefficients  # <- This will get the coefficient matrix
   }
 
-  coef_value <- stats::coef(model)[2]
-  coef_p_value <- model_coef$coefficients[2, 4]
-  if (coef_value > 0) {
-    direction <- "increases"
-  } else {
-    direction <- "decreases"
-  }
+  coef_value <- model_coef[2, 1]
+  coef_p_value <- model_coef[2, 4]
 
-  confidence_level <- (1 - coef_p_value) * 100
-
-  if (coef_p_value < 0.01) {
-    significance <- paste("highly significant (p <", 0.01, ")")
-    hypothesis <- "null hypothesis is rejected"
-  } else if (coef_p_value < 0.05) {
-    significance <- paste("significant (p <", 0.05, ")")
-    hypothesis <- "null hypothesis is rejected"
-  } else {
-    significance <- paste("not significant (p =", round(coef_p_value, 3), ")")
-    hypothesis <- "null hypothesis is not rejected"
-  }
-
-  change <- paste("For every unit increase in", x,
-                  ", the variable", y, direction, "by", round(coef_value, 2), "units.")
-
-  if(coef_p_value >= 0.05) {
-    alert <- paste("Alert, the coefficient for", x,
-                   "is not statistically significant with a p-value of", round(coef_p_value, 3), ".")
-    change <- paste(alert, change)
-  }
-
-  coef_value <- stats::coef(model)[2]
-  coef_p_value <- summary(model)$coefficients[2, 4]
-
+  direction <- ifelse(coef_value > 0, "increases", "decreases")
   p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
-
-  if (coef_value > 0) {
-    direction <- "increases"
-  } else {
-    direction <- "decreases"
-  }
-
   impact_determination <- ifelse(coef_p_value < alpha, "significant", "not significant")
   hypothesis_decision <- ifelse(coef_p_value < alpha, "is rejected", "is not rejected")
 
-  change <- paste("For every unit increase in the predictor", x, ", the variable", y, direction, "by", round(coef_value, 2), "units.")
+  interpretation_message <- paste("For every unit increase in the predictor", x, ", the variable", y, direction,
+                                  "by", round(coef_value, 2), "units. This effect has a p-value of", p_value_text,
+                                  "and, using a significance level of", alpha, ",", hypothesis_decision,
+                                  "the null hypothesis and it indicates that the variable", x, "has a",
+                                  impact_determination, "impact on predicting", y, ".")
 
-  interpretation_message <- paste(change,
-                                  "This effect has a p-value of", p_value_text, "and, using a significance level of", alpha, ",",
-                                  hypothesis_decision, "the null hypothesis and it indicates that the variable", x,
-                                  "has a", impact_determination, "impact on predicting", y, ".")
-
-  hetero_message <- NULL
-
-  if (coef_p_value < alpha) {
-    # Only check and report heteroscedasticity if the model is significant.
-    bptest_result <- lmtest::bptest(model)
-    corrected <- FALSE
-
-    if (bptest_result$p.value < 0.05) {
-      # Evidence of heteroscedasticity detected, correct standard errors
-      model <- lmtest::coeftest(model, vcov = sandwich::vcovHC(model, type = "HC2"))
-      corrected <- TRUE
-      hetero_message <- "Heteroscedasticity was detected in the residuals and standard errors were corrected."
-    } else {
-      hetero_message <- "No heteroscedasticity was detected in the residuals."
-    }
-  }
-
-  # Combine the messages if hetero_message exists
-  if (!is.null(hetero_message)) {
-    final_message <- paste(interpretation_message, hetero_message,
-                           "Remember that this function interprets the model result as it has been presented.")
-  } else {
-    final_message <- paste(interpretation_message,
-                           "Remember that this function interprets the model result as it has been presented.")
-  }
+  # Combine the messages
+  final_message <- paste(interpretation_message, hetero_message,
+                         "Remember that this function interprets the model result as it has been presented.")
 
   return(final_message)
 }

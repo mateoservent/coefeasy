@@ -4,7 +4,7 @@
 \alias{Coeffeasy_logit}
 \title{Easily interpret the coefficients of a logistic model.}
 \usage{
-Coeffeasy_logit(modelo, x = NULL, y = NULL, alfa = 0.05)
+Coeffeasy_logit(modelo, x = NULL, y = NULL, alpha = 0.05)
 }
 \arguments{
 \item{modelo}{A glm object with binomial family (logistic model).}
@@ -13,7 +13,7 @@ Coeffeasy_logit(modelo, x = NULL, y = NULL, alfa = 0.05)
 
 \item{y}{Name of the response variable (character). If NULL, the function will try to identify it automatically.}
 
-\item{alfa}{Significance level for hypothesis testing. The default value is 0.05.}
+\item{alpha}{Significance level for hypothesis testing. The default value is 0.05.}
 }
 \value{
 A text string with the interpretation of the logistic model's coefficients.

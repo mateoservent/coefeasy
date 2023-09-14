@@ -4,14 +4,14 @@
 \alias{Coeffeasy_multinom}
 \title{Easily interpret the coefficients of a multinomial model.}
 \usage{
-Coeffeasy_multinom(modelo, x = NULL, alfa = 0.05)
+Coeffeasy_multinom(modelo, x = NULL, aplha = 0.05)
 }
 \arguments{
 \item{modelo}{A multinom object (multinomial model).}
 
 \item{x}{Name of the predictor variable of interest (character). If NULL, the function will try to identify it automatically.}
 
-\item{alfa}{Significance level for hypothesis testing. The default value is 0.05.}
+\item{aplha}{Significance level for hypothesis testing. The default value is 0.05.}
 }
 \value{
 A text string with the interpretation of the multinomial model's coefficients.

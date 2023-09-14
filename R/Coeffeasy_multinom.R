@@ -6,12 +6,12 @@
 #'
 #' @param modelo A multinom object (multinomial model).
 #' @param x Name of the predictor variable of interest (character). If NULL, the function will try to identify it automatically.
-#' @param alfa Significance level for hypothesis testing. The default value is 0.05.
+#' @param aplha Significance level for hypothesis testing. The default value is 0.05.
 #'
 #' @return A text string with the interpretation of the multinomial model's coefficients.
 #'
 #' @export
-Coeffeasy_multinom <- function(modelo, x = NULL, alfa = 0.05) {
+Coeffeasy_multinom <- function(modelo, x = NULL, aplha = 0.05) {
   # Get the names of the model variables if x is not specified
   if (is.null(x)) {
     variables <- as.character(attr(terms(modelo), "variables"))
@@ -33,13 +33,13 @@ Coeffeasy_multinom <- function(modelo, x = NULL, alfa = 0.05) {
     }
 
     p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
-    hypothesis_decision <- ifelse(coef_p_value < alfa, "is rejected", "is not rejected")
+    hypothesis_decision <- ifelse(coef_p_value < aplha, "is rejected", "is not rejected")
 
     change <- paste("For vehicles with", level, "cylinders: If", x, "increases by one unit, the log-odds of being in this level relative to the reference level", direction, "by", round(coef_value, 2), "units.")
     accessible_reading <- paste("This suggests that, when", x, "increases, it becomes", impact, "for a vehicle to have", level, "cylinders relative to the reference level.")
 
     interpretation_message <- paste(change, accessible_reading,
-                                    "This effect has a p-value of", p_value_text, "and, using a significance level of", alfa, ",",
+                                    "This effect has a p-value of", p_value_text, "and, using a significance level of", aplha, ",",
                                     "the null hypothesis", hypothesis_decision, ". This indicates that", x,
                                     "has a statistically significant impact on the likelihood of a vehicle having", level, "cylinders relative to the reference level.")
 
