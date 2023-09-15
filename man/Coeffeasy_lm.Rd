@@ -4,20 +4,27 @@
 \alias{Coeffeasy_lm}
 \title{Interpretation of Coefficients for Linear Regression Models}
 \usage{
-Coeffeasy_lm(model, x = NULL, y = NULL, alpha = 0.05)
+Coeffeasy_lm(
+  model,
+  x = NULL,
+  y = NULL,
+  alpha = 0.05,
+  error = "HC2",
+  cluster = NULL
+)
 }
 \arguments{
 \item{model}{An object of class \code{lm} representing the linear regression model.}
 
-\item{x}{A character string specifying the predictor variable. If not specified, it tries to determine it from the model.}
+\item{x}{A character string specifying the predictor variable.}
 
-\item{y}{A character string specifying the response variable. If not specified, it tries to determine it from the model.}
+\item{y}{A character string specifying the response variable.}
 
 \item{alpha}{A numeric value for the significance level. Default is 0.05.}
-}
-\value{
-A character string with the interpretation of the model coefficient,
-potential heteroskedasticity in the residuals, and the corresponding correction of standard errors.
+
+\item{error}{A character string specifying the type of heteroskedasticity consistent standard errors. Default is "HC2".}
+
+\item{cluster}{A value to specify the clustering variable. Default is NULL.}
 }
 \description{
 This function provides an easy interpretation of coefficients from linear regression models,

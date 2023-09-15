@@ -3,5 +3,6 @@
 export(Coeffeasy_lm)
 export(Coeffeasy_logit)
 export(Coeffeasy_multinom)
+import(sandwich)
 importFrom(lmtest,bptest)
 importFrom(lmtest,coeftest)

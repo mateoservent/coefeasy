@@ -4,17 +4,16 @@
 #' considering potential heteroskedasticity.
 #'
 #' @param model An object of class `lm` representing the linear regression model.
-#' @param x A character string specifying the predictor variable. If not specified, it tries to determine it from the model.
-#' @param y A character string specifying the response variable. If not specified, it tries to determine it from the model.
+#' @param x A character string specifying the predictor variable.
+#' @param y A character string specifying the response variable.
 #' @param alpha A numeric value for the significance level. Default is 0.05.
+#' @param error A character string specifying the type of heteroskedasticity consistent standard errors. Default is "HC2".
+#' @param cluster A value to specify the clustering variable. Default is NULL.
 #'
-#' @return A character string with the interpretation of the model coefficient,
-#' potential heteroskedasticity in the residuals, and the corresponding correction of standard errors.
-#'
-#' @importFrom lmtest bptest coeftest sandwich
-#'
+#' @importFrom lmtest bptest coeftest
+#' @import sandwich
 #' @export
-Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2") {
+Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2", cluster = NULL) {
   # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
     variables <- as.character(attr(terms(model), "variables"))
@@ -31,10 +30,17 @@ Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2")
 
   if (bptest_result$p.value < alpha) {
     # Heteroskedasticity detected, correct standard errors
-    model_coef <- lmtest::coeftest(model, vcov = sandwich::vcovHC(model, type = error))
-    hetero_message <- paste("Heteroscedasticity was detected in the residuals and standard errors were corrected with", error, "formula.")
+    if (!is.null(cluster)) {
+      # Apply cluster robust standard errors if cluster is provided
+      vcov_matrix <- sandwich::vcovCL(model, cluster = cluster, type = error)
+      hetero_message <- paste("Heteroscedasticity was detected in the residuals and standard errors were corrected with", error, "formula using clustering on", all.vars(cluster), ".")
+    } else {
+      vcov_matrix <- sandwich::vcovHC(model, type = error)
+      hetero_message <- paste("Heteroscedasticity was detected in the residuals and standard errors were corrected with", error, "formula.")
+    }
+    model_coef <- lmtest::coeftest(model, vcov = vcov_matrix)
   } else {
-    model_coef <- summary(model)$coefficients  # <- This will get the coefficient matrix
+    model_coef <- summary(model)$coefficients  # This will get the coefficient matrix
   }
 
   coef_value <- model_coef[2, 1]
