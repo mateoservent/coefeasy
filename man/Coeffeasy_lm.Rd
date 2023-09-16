@@ -10,13 +10,14 @@ Coeffeasy_lm(
   y = NULL,
   alpha = 0.05,
   error = "HC2",
-  cluster = NULL
+  cluster = NULL,
+  short = T
 )
 }
 \arguments{
 \item{model}{An object of class \code{lm} representing the linear regression model.}
 
-\item{x}{A character string specifying the predictor variable.}
+\item{x}{A character string specifying the name of the predictor variable.}
 
 \item{y}{A character string specifying the response variable.}
 
@@ -25,8 +26,11 @@ Coeffeasy_lm(
 \item{error}{A character string specifying the type of heteroskedasticity consistent standard errors. Default is "HC2".}
 
 \item{cluster}{A value to specify the clustering variable. Default is NULL.}
+
+\item{short}{A logical flag indicating if the output message should be shorter and more concise. Default is TRUE.}
 }
 \description{
-This function provides an easy interpretation of coefficients from linear regression models,
-considering potential heteroskedasticity.
+This function provides an easy interpretation of coefficients from linear regression models.
+It also checks for potential heteroskedasticity and uses, by default, the HC2 correction to
+the standard errors if it is detected.
 }
