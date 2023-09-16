@@ -14,20 +14,24 @@
 #' @importFrom lmtest bptest coeftest
 #' @import sandwich
 #' @export
-Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2", cluster = NULL) {
+Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2", cluster = NULL, short = T) {
+
   # Get the names of the model variables if they are not specified
-  if (is.null(x) || is.null(y)) {
-    variables <- as.character(attr(terms(model), "variables"))
-    y_default <- variables[2]
-    x_default <- variables[variables==x]
+  variables <- names(model$model)
+  y_default <- variables[1] # This is the dependent variable
+  x_default <- variables[2] # This is the first independent variable by default
+
+  # Check if x is provided and it's in the model
+  if (!is.null(x)) {
+    stopifnot(x %in% variables)
+  } else {
+    x <- x_default
   }
 
-## x has to be a single variable name in the model
-  stopifnot(x %in% variables)
-  stopifnot(length(x)!=1)
-
-  if (is.null(x)) x <- x_default
-  if (is.null(y)) y <- y_default
+  # If y is not provided, use the default y
+  if (is.null(y)) {
+    y <- y_default
+  }
 
   # Check for heteroskedasticity
   bptest_result <- lmtest::bptest(model)
@@ -53,17 +57,18 @@ Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2",
 
   direction <- ifelse(coef_value > 0, "increases", "decreases")
   p_value_text <- ifelse(coef_p_value < 0.001, paste("<", 0.001), sprintf("%.3f", coef_p_value))
-  impact_determination <- ifelse(coef_p_value < alpha, "significant", "not significant")
   hypothesis_decision <- ifelse(coef_p_value < alpha, "reject", "not reject")
 
-  interpretation_message <- paste("The model fit implies that, for two observations differing by 1 unit in the predictor", x, ", the average of the variable", y, #direction,
-                                  "differs by", round(coef_value, 2), "units after removing the additive and linear relationships between", x," and all other other variables and after removing the linear and additive relationship between",y,"and all of the other variables. The test of the hypothesis that the regression coefficient on",x,"is zero receives a p-value of", p_value_text,
-                                  "and, using a significance level of", alpha, ", encourages the researcher to", hypothesis_decision,
-                                  "this null hypothesis.")
+  if (short) {
+    interpretation_message <- paste("The fitted model suggests that for every one-unit increase in the predictor", x, ", the average value of", y, "is expected to", direction, "by", round(coef_value, 2), "units, holding all other variables constant. The test of the hypothesis that the regression coefficient on", x, "is zero receives a p-value of", p_value_text, "and, using a significance level of", alpha, ", encourages the researcher to", hypothesis_decision, "this null hypothesis.")
+  } else {
+    interpretation_message <- paste("The model fit implies that, for two observations differing by 1 unit in the predictor", x, ", the average of the variable", y, direction,
+                                    "differs by", round(coef_value, 2), "units after removing the additive and linear relationships between", x," and all other variables and after removing the linear and additive relationship between", y, "and all of the other variables. The test of the hypothesis that the regression coefficient on", x, "is zero receives a p-value of", p_value_text,
+                                    "and, using a significance level of", alpha, ", encourages the researcher to", hypothesis_decision, "this null hypothesis.")
+  }
 
   # Combine the messages
   final_message <- paste(interpretation_message, hetero_message)
-  #, "Remember that this function interprets the model result as it has been presented.")
 
   return(final_message)
 }
