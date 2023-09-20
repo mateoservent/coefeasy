@@ -43,8 +43,8 @@ model <- lm(mpg ~ wt + hp + qsec, data = mtcars)
 # Using the default settings, which automatically deduce variable names and use an alpha of 0.05
 Coeffeasy_lm(model) 
 
-# Specifying the names of the response and predictor variables for a clearer interpretation, and adjusting the significance level
-Coeffeasy_lm(model, y = "Miles per gallon", x = "Car weight (1000 lbs)", alpha = 0.01) 
+# Specifying the names of the response and predictor variables for a clearer interpretation, adjusting the significance level, and selecting a longer, more descriptive result
+Coeffeasy_lm(model, y = "Miles per gallon", x = "Car weight (1000 lbs)", alpha = 0.01, short = F) 
 
 ```
 ## Example Logistic Regression
