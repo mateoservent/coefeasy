@@ -7,10 +7,9 @@ output: github_document
 # Coeffeasy
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/Coeffeasy)](https://CRAN.R-project.org/package=Coeffeasy)
 <!-- badges: end -->
-
 
 `Coeffeasy` is an R package under development for making regression coefficients more accessible. With this tool, you can read linear, logistic, and multinomial regression coefficients accurately and instantly. The package now automatically controls for heteroscedasticity and offers the capability to choose the type of standard error for the correction and group errors by cluster—all in a single, streamlined function, and more enhancements are coming!
 
