@@ -1,0 +1,61 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "Coeffeasy",
+  "description": "The package offers tools to interpret statistical model results in natural language. It covers linear and logit models, evaluates model assumptions such as heteroscedasticity, and presents results in a comprehensible manner. Users can choose between different languages for output, enhancing the accessibility and understanding of complex analyses.",
+  "name": "Coeffeasy: Coeffeasy is an R package for making regression coefficients more accessible. With this tool, you can plot and read many key coefficients instantly",
+  "license": "https://spdx.org/licenses/MIT",
+  "version": "0.0.0.9000",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.3.0 (2023-04-21)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Mateo",
+      "familyName": "Servent",
+      "email": "mateoservent@gmail.com"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Mateo",
+      "familyName": "Servent",
+      "email": "mateoservent@gmail.com"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "lmtest",
+      "name": "lmtest",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lmtest"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "sandwich",
+      "name": "sandwich",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sandwich"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "46.045KB",
+  "codeRepository": "https://github.com/mateoservent/Coeffeasy",
+  "readme": "https://github.com/mateoservent/Coeffeasy/blob/main/README.md"
+}
