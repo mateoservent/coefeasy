@@ -11,7 +11,8 @@ Coeffeasy_lm(
   alpha = 0.05,
   error = "HC2",
   cluster = NULL,
-  short = T
+  short = T,
+  language = "en"
 )
 }
 \arguments{
@@ -28,9 +29,12 @@ Coeffeasy_lm(
 \item{cluster}{A value to specify the clustering variable. Default is NULL.}
 
 \item{short}{A logical flag indicating if the output message should be shorter and more concise. Default is TRUE.}
+
+\item{language}{A character string indicating the desired output language. Default is "en" (English). Uses Google Translate via the \code{polyglotr} package.}
 }
 \description{
 This function provides an easy interpretation of coefficients from linear regression models.
 It also checks for potential heteroskedasticity and uses, by default, the HC2 correction to
-the standard errors if it is detected.
+the standard errors if it is detected. Additionally, it allows for multilingual output by leveraging the
+\code{polyglotr} package to translate the interpretation message.
 }
