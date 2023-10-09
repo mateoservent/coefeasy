@@ -76,8 +76,7 @@ Coeffeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2",
 
   # Translate the message if language is not "en"
   if (language != "en") {
-    library(polyglotr)
-    final_message_translated <- google_translate(final_message, target_language = language, source_language = "en")
+    final_message_translated <- polyglotr::google_translate(final_message, target_language = language, source_language = "en")
     return(final_message_translated)
   } else {
     return(final_message)

@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^codemeta\.json$
+^README\.Rmd$
+^README\.html$
