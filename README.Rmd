@@ -46,6 +46,7 @@ Coeffeasy_lm(model)
 
 # Specifying the names of the response and predictor variables for a clearer interpretation, adjusting the significance level, and selecting a longer, more descriptive result
 Coeffeasy_lm(model, y = "Miles per gallon", x = "Car weight (1000 lbs)", alpha = 0.01, short = F) 
+
 # To display results in another language, such as French, use the argument 'language="fr"' (beta).
 
 ```
