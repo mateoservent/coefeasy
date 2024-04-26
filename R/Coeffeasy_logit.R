@@ -12,7 +12,7 @@
 #' @return A text string with the interpretation of the logistic model's coefficients.
 #'
 #' @export
-Coeffeasy_logit <- function(modelo, x = NULL, y = NULL, alpha = 0.05) {
+coefeasy_logit <- function(modelo, x = NULL, y = NULL, alpha = 0.05) {
   # Get the names of the model variables if they are not specified
   if (is.null(x) || is.null(y)) {
     variables <- as.character(attr(terms(modelo), "variables"))
