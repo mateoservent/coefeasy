@@ -11,14 +11,13 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
 status](https://www.r-pkg.org/badges/version/Coeffeasy)](https://CRAN.R-project.org/package=Coeffeasy)
 <!-- badges: end -->
 
-`Coefeasy` is an R package under development for making regression
-coefficients more accessible. With this tool, you can read linear,
-logistic, and multinomial regression coefficients accurately and
-instantly. The package offers results not only in English, but in
-multiple languages, and now automatically controls for
-heteroscedasticity and offers the capability to choose the type of
-standard error for the correction and group errors by cluster—all in a
-single, streamlined function.
+`Coefeasy` is a simple R package under development for making regression
+coefficients more accessible. With this tool, you can read linear and
+logistic regression coefficients accurately and instantly. The package
+offers results not only in English, but in multiple languages, and now
+automatically controls for heteroscedasticity and offers the capability
+to choose the type of standard error for the correction and group errors
+by cluster—all in a single, streamlined function.
 
 In the evolving landscape of statistical tools within the R environment,
 `coefeasy` is an innovative R package designed to simplify and automate
@@ -38,13 +37,13 @@ regression results, recognizing that although an interpretation of
 coefficients should follow a consistent design, the underlying knowledge
 to read the results of a regression can be quite technical and
 unambiguous in its presentation. Acknowledging this challenge,
-`coefeasy` offers a systematic solution, primarily serving linear,
-logistic, and multinomial models. However, its developmental trajectory
-is set to incorporate advanced models. As evidence-based decision making
-continues to gain importance, `coefeasy` aims to help close the
-knowledge gap, providing clear and accessible statistical learning, and
-reinforcing the importance of both automation and accessibility in
-contemporary data science.
+`coefeasy` offers a systematic solution, primarily serving linear and
+logistic models. However, its developmental trajectory is set to
+incorporate advanced models. As evidence-based decision making continues
+to gain importance, `coefeasy` aims to help close the knowledge gap,
+providing clear and accessible statistical learning, and reinforcing the
+importance of both automation and accessibility in contemporary data
+science.
 
 ## Installation
 
