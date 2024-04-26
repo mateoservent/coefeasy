@@ -37,7 +37,7 @@ from [github](https://github.com/your_github_username/Coeffeasy) with:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("mateoservent/Coeffeasy")
+remotes::install_github("mateoservent/coefeasy")
 ```
 
 ## Example Linear Regression
@@ -48,7 +48,7 @@ affects miles per gallon when controlling for horsepower and quarter
 mile time.
 
 ``` r
-library(Coeffeasy)
+library(coefeasy)
 
 # Fit the linear regression model
 model <- lm(mpg ~ wt + hp + qsec, data = mtcars)

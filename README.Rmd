@@ -23,7 +23,7 @@ Coeffeasy can be installed using the development version of the package from [gi
 
 ``` r
 install.packages("remotes")
-remotes::install_github("mateoservent/Coeffeasy")
+remotes::install_github("mateoservent/coefeasy")
 
 ```
  
@@ -32,7 +32,7 @@ remotes::install_github("mateoservent/Coeffeasy")
 In this example, we use `coefeasy_lm()` to interpret coefficients from a linear regression on the mtcars dataset, analyzing how car weight affects miles per gallon when controlling for horsepower and quarter mile time.
 
 ``` r
-library(Coeffeasy)
+library(coefeasy)
 
 # Fit the linear regression model
 model <- lm(mpg ~ wt + hp + qsec, data = mtcars)
