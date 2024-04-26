@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Coeffeasy <img src="man/figures/coefeasy_logo.png" width="160px" align="right"/>
+# Coefeasy <img src="man/figures/coefeasy_logo.png" width="160px" align="right"/>
 
 <!-- badges: start -->
 
