@@ -13,22 +13,25 @@ status](https://www.r-pkg.org/badges/version/Coeffeasy)](https://CRAN.R-project.
 
 `Coefeasy` is a simple R package under development for making regression
 coefficients more accessible. With this tool, you can read linear and
-logistic regression coefficients accurately and instantly. The package
-offers results not only in English, but in multiple languages, and now
-automatically controls for heteroscedasticity and offers the capability
-to choose the type of standard error for the correction and group errors
-by cluster—all in a single, streamlined function.
+logistic regression coefficients accurately and instantly. The output of
+the functions here is only readings in natural language and helps to
+standardize the phrasing of widely used models. The package offers
+results not only in English, but in multiple languages, and can
+automatically control for heteroscedasticity and offer the capability to
+choose the type of standard error for the correction and group errors by
+cluster—all in a single function.
 
 `Coefeasy` is a straightforward package designed primarily for, but not
-limited to, professors and graduate students. Historically, although an
-interpretation of coefficients should follow a consistent design, the
-underlying knowledge to read the results of a regression can be quite
-technical and unambiguous in its presentation. Acknowledging this
-challenge, `coefeasy` offers a systematic solution, primarily serving
-linear and logistic models. As evidence-based decision making continues
-to gain importance, `coefeasy` aims to help close the knowledge gap,
-providing clear and accessible statistical learning, and reinforcing the
-importance of both automation and accessibility.
+limited to, people learning or teaching introduction to statistics or
+econometrics. Historically, although an interpretation of coefficients
+should follow a consistent design, the underlying knowledge to read the
+results of a regression can be quite technical and unambiguous in its
+presentation. Acknowledging this challenge, `coefeasy` offers a
+systematic solution, primarily serving linear and logistic models. As
+evidence-based decision making continues to gain importance, `coefeasy`
+aims to help close that knowledge gap, providing clear and accessible
+statistical learning, and reinforcing the importance of automation and
+standardization.
 
 ## Installation
 

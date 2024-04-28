@@ -19,7 +19,7 @@
 #' @import sandwich
 #' @export
 
-coeefeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2", cluster = NULL, short = T, language = "en") {
+coefeasy_lm <- function(model, x = NULL, y = NULL, alpha = 0.05, error = "HC2", cluster = NULL, short = T, language = "en") {
 
   # Extract variable names from the model formula
   variables <- all.vars(model$call$formula)
