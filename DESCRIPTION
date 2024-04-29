@@ -1,5 +1,5 @@
-Package: Coeffeasy
-Title: Coeffeasy is an R package for making regression coefficients more accessible. With this tool, you can plot and read many key coefficients instantly
+Package: Coefeasy
+Title: Coefeasy is an R package for making regression coefficients more accessible. With this tool, you can plot and read many key coefficients instantly
 Version: 0.0.0.9000
 Authors@R: 
     person("Mateo", "Servent", , "mateoservent@gmail.com",role = c("aut", "cre")
