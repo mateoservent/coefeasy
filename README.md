@@ -12,12 +12,12 @@ status](https://www.r-pkg.org/badges/version/Coeffeasy)](https://CRAN.R-project.
 <!-- badges: end -->
 
 `Coefeasy` is a simple R package under development for making regression
-coefficients more accessible. With this tool, you can read linear and
+coefficients more accessible. With this tool, you can report linear and
 logistic regression coefficients accurately and instantly. The output of
 the functions here is only readings in natural language and helps to
 standardize the phrasing of widely used models. The package offers
 results not only in English, but in multiple languages, and can
-automatically control for heteroscedasticity and offer the capability to
+automatically control for heteroscedasticity, and offers the capability to
 choose the type of standard error for the correction and group errors by
 cluster—all in a single function.
 
